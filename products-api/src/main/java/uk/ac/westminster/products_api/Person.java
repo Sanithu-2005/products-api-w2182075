@@ -35,8 +35,8 @@ public class Person {
         this.name = name;
     }
 
-    private void email(){
-
+    private void setEmail(){
+    this.email=email;
     }
 
     public String getEmail() {
