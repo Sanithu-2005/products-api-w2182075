@@ -3,6 +3,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import static uk.ac.westminster.products_api.Customer.customerCount;
+
 @RestController
 @RequestMapping("/customers")
 public class CustomerController {
@@ -13,4 +16,10 @@ public class CustomerController {
         return new Customer(id, "Ada Lovelace",
                 "ada@example.com", address);
     }
+
+    public static int getCustomerCount() {
+        return customerCount;
+    }
+
+
 }
