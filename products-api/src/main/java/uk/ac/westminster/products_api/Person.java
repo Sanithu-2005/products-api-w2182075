@@ -32,11 +32,12 @@ public class Person {
     }
 
     public void setName(String name) {
+
         this.name = name;
     }
 
     private void setEmail(String email){
-    this.email=email;
+        this.email=email;
     }
 
     public String getEmail() {
