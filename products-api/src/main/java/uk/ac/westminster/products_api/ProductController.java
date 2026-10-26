@@ -51,6 +51,11 @@ public class ProductController {
 
     }
 
+    @GetMapping("/product/summaries")
+    public List<String> getSummaries() {
+        return productService.getAllSummaries();
+
+    }
 
 }
 

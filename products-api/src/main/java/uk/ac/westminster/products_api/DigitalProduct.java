@@ -1,8 +1,19 @@
 package uk.ac.westminster.products_api;
 
-public class DigitalProduct extends Product{
+public class DigitalProduct extends Product implements Discountable{
     private String downloadUrl;
     private double fileSizeMB;
+    private double discountedPrice;
+
+    @Override
+    public void applyDiscount(double rate){
+        discountedPrice = getPrice()*(1-rate);
+    }
+
+    @Override
+    public double getDiscountedPrice() {
+        return discountedPrice;
+    }
 
     // no-arg constructor — Jackson needs this to build
 // an object from an incoming JSON request body
@@ -23,5 +34,9 @@ public class DigitalProduct extends Product{
         return fileSizeMB;
     }
 
-
+    @Override
+    public String getSummary() {
+        return "Digital: " + getName()
+                + " | Download: " + downloadUrl;
+    }
 }
