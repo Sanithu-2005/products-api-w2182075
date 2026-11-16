@@ -1,72 +1,48 @@
 package uk.ac.westminster.products_api;
 
 import org.springframework.stereotype.Service;
+import uk.ac.westminster.products_api.repository.ProductRepository;
 
-import java.util.*;
+import java.util.List;
 
 @Service
 public class ProductService {
-    private List<Product> products = new ArrayList<>();
-    private Long nextId = 1L;
 
+    // The interface, never the implementation.
+    private final ProductRepository repository;
 
+    public ProductService(ProductRepository repository) {
+        this.repository = repository;
+    }
 
     public List<Product> getAllProducts() {
-        return products;
+        return repository.findAll();
     }
 
-
-    public Product addDigitalProduct(Product product) {
-        product.setId(nextId++);
-        products.add(new DigitalProduct(
-                nextId++, "Clean Code (E-book)", 29.99,
-                "/downloads/clean-code.pdf", 4.2));
-        return product;
+    public Product getProductById(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException(id));
     }
-
-    public Product addPhysicalProduct(Product product) {
-        product.setId(nextId++);
-        products.add(new PhysicalProduct(nextId++, "27-inch Monitor", 249.99,
-                5.4, "61cm x 41cm x 18cm"));
-        return product;
-    }
-
-
 
     public Product addProduct(Product product) {
-        product.setId(nextId++); // use the value, then add one
-        products.add(product);
-        return product;
-}
-    // ---- in ProductService.java ----
-    public Optional<Product> getProductById(Long id) {
-        return products.stream()
-                .filter(p -> p.getId().equals(id))
-                .findFirst();
+        return repository.save(product);
     }
 
-    // ---- in ProductService.java ----
     public void deleteProduct(Long id) {
-        products.removeIf(p -> p.getId().equals(id));
+        getProductById(id);          // throws 404 if it is not there
+        repository.delete(id);
     }
 
-    // ---- in ProductService.java ----
     public List<Product> findByName(String name) {
-        return products.stream()
+        return repository.findAll().stream()
                 .filter(p -> p.getName().contains(name))
                 .toList();
-
-
     }
 
-    public List<String> getAllSummaries(){
-        List<String> summaries = new ArrayList<>();
-        for(Product p:products){
-            summaries.add(p.getSummary());
-        }
-        return summaries;
+    public List<String> getAllSummaries() {
+        return repository.findAll().stream()
+                .map(Product::getSummary)
+                .toList();
     }
-
 }
-
 
